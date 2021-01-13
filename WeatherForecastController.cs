@@ -1,32 +1,37 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
-namespace WebApplication2.Controllers
+namespace WebApplication5.Controllers
 {
+    
     [ApiController]
     [Route("[controller]")]
+    
     public class WeatherForecastController : ControllerBase
     {
+        static List<Student> name = new List<Student>();
+        Student sg = new Student() { roll = 44, age = 56, name3 = "jilk" };
         private static readonly string[] Summaries = new[]
         {
-            "1","2","3","4","5","6"
+            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController()
         {
-            _logger = logger;
+            
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<Student> Get()
         {
-            var rng = new Random();
+
+            return name;/*var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
@@ -34,6 +39,35 @@ namespace WebApplication2.Controllers
                 Summary = Summaries[rng.Next(Summaries.Length)]
             })
             .ToArray();
+            */
+        }
+        [HttpPost]
+        public void Post(int age, int roll, string namer)
+        {
+            Student sg = new Student()
+            {
+                roll = 43,
+                age = 43,
+                name3 = "hello"
+            };
+            Student gf = new Student()
+            {
+                roll = 56,
+                age = 67,
+                name3 = "vishwa"
+            };
+            name.Add(sg);
+            name.Add(gf);
+            Student gh = new Student() { age = age, roll = roll, name3 = namer };
+            name.Add(gh);
+        }
+        [HttpDelete]
+        public void Delete(int roll,int age,string name3)
+        {
+
+            var item = name.SingleOrDefault(x => x.roll == roll);
+           name.Remove(item);
+
         }
     }
 }
