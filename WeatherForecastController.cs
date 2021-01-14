@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-
+using System;
+using Newtonsoft.Json;
 namespace WebApplication5.Controllers
 {
-    
+
     [ApiController]
     [Route("[controller]")]
     
@@ -28,10 +27,11 @@ namespace WebApplication5.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Student> Get()
+        public string Get()
         {
 
-            return name;/*var rng = new Random();
+            String json = JsonConvert.SerializeObject(name);
+            return json;/*var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
@@ -61,11 +61,20 @@ namespace WebApplication5.Controllers
             Student gh = new Student() { age = age, roll = roll, name3 = namer };
             name.Add(gh);
         }
+        [HttpPut]
+        public void putAll(int roll,int age,string name3)
+        {
+            var item = name.SingleOrDefault(x => x.roll == roll);
+            name.Remove(item);
+            item.age = age;
+            item.name3 = name3;
+            name.Add(item);
+        }
         [HttpDelete]
         public void Delete(int roll,int age,string name3)
         {
 
-            var item = name.SingleOrDefault(x => x.roll == roll);
+           var item = name.SingleOrDefault(x => x.roll == roll);
            name.Remove(item);
 
         }
