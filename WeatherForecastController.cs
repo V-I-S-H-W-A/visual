@@ -1,19 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using Newtonsoft.Json;
-namespace WebApplication5.Controllers
-{
+using System.Threading.Tasks;
 
+namespace WebApplication7.Controllers
+{
     [ApiController]
     [Route("[controller]")]
-    
     public class WeatherForecastController : ControllerBase
     {
         static List<Student> name = new List<Student>();
-        Student sg = new Student() { roll = 44, age = 56, name3 = "jilk" };
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -21,62 +19,32 @@ namespace WebApplication5.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
-        public WeatherForecastController()
+        public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
-            
+            _logger = logger;
         }
 
         [HttpGet]
-        public string Get()
+        public IActionResult Get()
         {
-
-            String json = JsonConvert.SerializeObject(name);
-            return json;/*var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            int length = name.Count;
+            for(int i=0;i<length;i+=2)
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
-            */
+                Student st;
+                st = name[i];
+                name[i] = name[i + 1];
+                name[i + 1] = st;
+                int temp=name[i].roll;
+                name[i].roll = name[i + 1].roll;
+                name[i + 1].roll = temp;
+            }
+            return Ok(name);
         }
         [HttpPost]
-        public void Post(int age, int roll, string namer)
+        public IActionResult Put([FromBody]Student obj)
         {
-            Student sg = new Student()
-            {
-                roll = 43,
-                age = 43,
-                name3 = "hello"
-            };
-            Student gf = new Student()
-            {
-                roll = 56,
-                age = 67,
-                name3 = "vishwa"
-            };
-            name.Add(sg);
-            name.Add(gf);
-            Student gh = new Student() { age = age, roll = roll, name3 = namer };
-            name.Add(gh);
-        }
-        [HttpPut]
-        public void putAll(int roll,int age,string name3)
-        {
-            var item = name.SingleOrDefault(x => x.roll == roll);
-            name.Remove(item);
-            item.age = age;
-            item.name3 = name3;
-            name.Add(item);
-        }
-        [HttpDelete]
-        public void Delete(int roll,int age,string name3)
-        {
-
-           var item = name.SingleOrDefault(x => x.roll == roll);
-           name.Remove(item);
-
+            name.Add(obj);
+            return Ok(name);
         }
     }
 }
